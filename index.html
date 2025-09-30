@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarcoma Chatbot - Mount Sinai Hospital</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        
+        /* Hero Header */
+        .hero-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3);
+        }
+        
+        .hero-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            opacity: 0.95;
+        }
+        
+        .hero-credit {
+            font-size: 1.05rem;
+            margin-top: 0.8rem;
+            opacity: 0.85;
+            font-style: italic;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            margin: 3rem 0 2rem 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .welcome-heading {
+            color: #1e3a8a;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .welcome-text {
+            color: #4b5563;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            max-width: 850px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .journey-prompt {
+            color: #1e3a8a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+        
+        /* Journey Stage Cards */
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+        
+        .stage-card {
+            background: white;
+            border: 2px solid #dbeafe;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stage-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(30, 58, 138, 0.05), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .stage-card:hover::before {
+            left: 100%;
+        }
+        
+        .stage-card:hover {
+            transform: translateY(-4px);
+            border-color: #1e40af;
+            box-shadow: 0 12px 30px rgba(30, 58, 138, 0.15);
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+        }
+        
+        .stage-card-text {
+            color: #1e3a8a;
+            font-size: 1.05rem;
+            font-weight: 500;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stage-card.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        /* Chat Section */
+        .chat-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .chat-title {
+            color: #1e3a8a;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .chat-input-group {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .chat-textarea {
+            flex: 1;
+            border: 2px solid #dbeafe;
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 1.05rem;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 130px;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-textarea:focus {
+            outline: none;
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        
+        .chat-button {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+            height: fit-content;
+            margin-top: 3.5rem;
+        }
+        
+        .chat-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.35);
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            right: 2rem;
+            top: 120px;
+            width: 300px;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+        
+        .sidebar-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-section {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-color: #fecaca;
+        }
+        
+        .emergency-section .sidebar-title {
+            color: #dc2626;
+        }
+        
+        .emergency-section ul,
+        .emergency-section p {
+            color: #991b1b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .emergency-section ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .emergency-section li {
+            margin: 0.3rem 0;
+        }
+        
+        .resources-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-color: #bfdbfe;
+        }
+        
+        .resources-section .sidebar-title {
+            color: #1e3a8a;
+        }
+        
+        .resources-section a {
+            color: #1e40af;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .resources-section a:hover {
+            background: rgba(30, 58, 138, 0.1);
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer p {
+            margin: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .footer-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                max-width: 600px;
+                margin: 2rem auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-input-group {
+                flex-direction: column;
+            }
+            
+            .chat-button {
+                margin-top: 1rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Header -->
+    <div class="hero-header">
+        <h1>Sarcoma Chatbot</h1>
+        <p class="hero-subtitle">Intended for educational use by patients with sarcoma at Mount Sinai Hospital</p>
+        <p class="hero-credit">An endeavour by University of Toronto Orthopaedics</p>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2 class="welcome-heading">Welcome. We're here to support you.</h2>
+            <p class="welcome-text">
+                This guide is made to help you understand your care for bone or soft tissue sarcoma. 
+                We know this can feel overwhelming, but you don't have to go through it alone. 
+                Whether you're just starting out, getting ready for treatment, or already recovering, 
+                we're here to explain things in simple language and guide you step by step.
+            </p>
+            <p class="journey-prompt">Let's start by figuring out where you are in your care journey.</p>
+        </div>
+        
+        <!-- Journey Stage Cards -->
+        <div class="stage-grid">
+            <div class="stage-card">
+                <p class="stage-card-text">I'm waiting for tests or a diagnosis</p>
+            </div>
+            <div class="stage-card">
+                <p class="stage-card-text">I've just been told I have sarcoma</p>
+            </div>
+            <div class="stage-card">
+                <p class="stage-card-text">I'm getting ready for surgery</p>
+            </div>
+            <div class="stage-card">
+                <p class="stage-card-text">I just had surgery</p>
+            </div>
+            <div class="stage-card">
+                <p class="stage-card-text">I'm starting or receiving chemotherapy or radiation</p>
+            </div>
+            <div class="stage-card">
+                <p class="stage-card-text">I'm in follow-up care</p>
+            </div>
+            <div class="stage-card full-width">
+                <p class="stage-card-text">I'm not sure or I just have questions</p>
+            </div>
+        </div>
+        
+        <!-- Chat Section -->
+        <div class="chat-container">
+            <h2 class="chat-title">Ask Your Question</h2>
+            <div class="chat-input-group">
+                <textarea 
+                    class="chat-textarea" 
+                    placeholder="Type your sarcoma-related question here...
+
+For example:
+• What should I bring to my first appointment?
+• How do I prepare for surgery?
+• What are the side effects of chemotherapy?"
+                ></textarea>
+                <button class="chat-button">Get Answer</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Emergency Section -->
+        <div class="sidebar-section emergency-section">
+            <h3 class="sidebar-title">🚨 Emergency Information</h3>
+            <p><strong>Call 911 immediately if you have:</strong></p>
+            <ul>
+                <li>Fever over 100.4°F (38°C)</li>
+                <li>Severe pain that won't improve</li>
+                <li>Trouble breathing or chest pain</li>
+                <li>Uncontrolled bleeding</li>
+                <li>Signs of serious infection</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Important Numbers:</strong></p>
+            <ul>
+                <li><strong>911</strong> - Life-threatening emergencies</li>
+                <li><strong>811</strong> - 24/7 Health advice</li>
+                <li><strong>416-586-4200</strong> - Mount Sinai ER</li>
+                <li><strong>416-586-4800 ext. 8243</strong> - Cancer Care Clinic</li>
+            </ul>
+        </div>
+        
+        <!-- Resources Section -->
+        <div class="sidebar-section resources-section">
+            <h3 class="sidebar-title">🔗 Helpful Resources</h3>
+            <a href="https://torontosarcoma.ca" target="_blank">Toronto Sarcoma Program</a>
+            <a href="http://sarcomacancer.ca" target="_blank">Sarcoma Cancer Foundation</a>
+            <a href="https://sinaihealth.ca/areas-of-care/cancer/sarcoma" target="_blank">Sinai Health Sarcoma Program</a>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-title">Mount Sinai Hospital Sarcoma Information Chatbot</p>
+        <p>Developed by University of Toronto Orthopaedic Surgery</p>
+        <p>For educational purposes only • Not a substitute for medical advice</p>
+        <p>© 2024 Mount Sinai Hospital • Toronto, Canada</p>
+    </div>
+</body>
+</html>
